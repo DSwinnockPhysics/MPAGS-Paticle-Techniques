@@ -131,7 +131,7 @@ q = 1.602*10**-19 # Electron charge
 c = 299792458 # speed of light, m/s
 L = 2 # Length of B Field in metres
 
-file = uproot.open(r"C:\Users\nemes\Desktop\B5_Custom.root")
+file = uproot.open(r"C:\Users\nemes\Desktop\Project Stuff\Geant4\RootFiles\B5_Custom200GeV.root")
 
 print(file["B5"])
 Dc1HitsX = file["B5"]["Dc1HitsVector_x"].array()/1000
@@ -253,17 +253,17 @@ pyplot.close(fig)
 
 
 
-MomentaHist,BinEdges = numpy.histogram(MomentaGeV,bins=10,range=(97,104))
+MomentaHist,BinEdges = numpy.histogram(MomentaGeV,bins=7)#,bins=10,range=(97,104))
 # print(MomentaHist,BinEdges)
 BinWidth = (BinEdges[1]-BinEdges[0])
 BinCentres = (BinEdges+BinWidth/2)
 BinCentres = BinCentres[:-1]
-# print(MomentaHist,BinCentres)
+print(MomentaHist,BinCentres)
 MomentaHist = numpy.array(MomentaHist)
 BinCentres = numpy.array(BinCentres)
-ResultsOfFit, var_matrix = scipy.optimize.curve_fit(GaussianForFit,BinCentres,MomentaHist,p0=[510,140,16],maxfev=1000)
+ResultsOfFit, var_matrix = scipy.optimize.curve_fit(GaussianForFit,BinCentres,MomentaHist,p0=[510,210,16],maxfev=1000)
 print(ResultsOfFit) # [Amplitude, Mean, Standard Deviation]
-FitXs = numpy.linspace(90,110,num=1000)
+FitXs = numpy.linspace(BinEdges[0]-1,BinEdges[-1]+1,num=1000)
 FitYs = GaussianForFit(FitXs,*ResultsOfFit)
 pyplot.plot(FitXs,FitYs,color='b')
 
@@ -285,7 +285,8 @@ pyplot.plot(FitXs,FitYs,color='b')
 pyplot.hist(MomentaGeV,bins=BinEdges,label="Angle->r",histtype='step')
 pyplot.legend()
 
-# MomentumResolution = StandardDeviation/Momentum
+MomentumResolution = ResultsOfFit[2]/ResultsOfFit[1]
+print("Momentum resolution (angle):",MomentumResolution)
 # For calorimetry look at things like total energies and plot energy distribtions, etc.
 
 # Calorimeter studies

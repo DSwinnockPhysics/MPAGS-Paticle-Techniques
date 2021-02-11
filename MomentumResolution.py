@@ -120,7 +120,7 @@ def FindBFIntersection(Coeffs1,Coeffs2):
 
 def FindPerpendicular(FitCoeffs,FieldIntercept):
     PerpCoeffs = numpy.array([0,0]) # [m,c]
-    PerpCoeffs[0] = -1/FitCoeffs[0] # -1/m
+    PerpCoeffs[0] = -1./FitCoeffs[0] # -1/m
     # c = y+x/m
     PerpCoeffs[1] = FieldIntercept[1] + FieldIntercept[0]/FitCoeffs[0]
     return PerpCoeffs
@@ -142,6 +142,7 @@ ECEnergies = file["B5"]["ECEnergy"].array()
 HCEnergies = file["B5"]["HCEnergy"].array()
 print(file["B5"].keys())
                   
+
 nevents = 1000
 
 FitCoeffsDc1 = numpy.zeros((nevents,2))
@@ -160,9 +161,11 @@ nEventsSkipped = 0
 nEventsMore5Hits = 0
 
 for i in range(nevents):
+    
     # First fit the line of best fit
     FitCoeffsDc1[i] = FindBestFitLine(numpy.array(Dc1HitsZ[i]),numpy.array(Dc1HitsX[i])) # vector of coefficients (gradient, intercept)
-    FitCoeffsDc2[i] = FindBestFitLine(numpy.array(Dc2HitsZ[i]),numpy.array(Dc2HitsX[i]))
+    FitCoeffsDc2[i] = FindBestFitLine(numpy.array(Dc2HitsZ[i]),numpy.array(Dc2HitsX[i]))    
+    
     LineIntersections[i] = FindLineIntersection(FitCoeffsDc1[i], FitCoeffsDc2[i])
         
     FieldIntersections1[i], FieldIntersections2[i], MissedBField = FindBFIntersection(FitCoeffsDc1[i],FitCoeffsDc2[i]) # Get the points at which the lines of best fit enter the B field
@@ -270,12 +273,8 @@ pyplot.hist(MomentaGeVPerp,bins=BinEdgesPerp,color='r',label="Direct r",histtype
 pyplot.hist(MomentaGeV,bins=BinEdges,label="Angle->r",histtype='step')
 pyplot.legend()
 
+MomentumResolution = ResultsOfFit[2]/ResultsOfFit[1]
+MomentumResolutionPerp = ResultsOfFitPerp[2]/ResultsOfFitPerp[1]
 
-# Calorimeter studies
-
-#print("ECEnergies:",ECEnergies[0:3])
-#print("HCEnergies:",HCEnergies[0:3])
-#print("MomentaGeV:",MomentaGeV[0:3])
-
-#print(((HCEnergies+ECEnergies)**2-MomentaGeV**2)**0.5)
-
+print("Momentum resolution (angle):",MomentumResolution,"GeV")
+print("Momentum resolution (perp):",MomentumResolutionPerp,"GeV")

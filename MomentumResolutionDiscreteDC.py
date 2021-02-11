@@ -287,13 +287,5 @@ pyplot.legend()
 
 MomentumResolution = ResultsOfFit[2]/ResultsOfFit[1]
 print("Momentum resolution (angle):",MomentumResolution)
-# For calorimetry look at things like total energies and plot energy distribtions, etc.
 
-# Calorimeter studies
-
-#print("ECEnergies:",ECEnergies[0:3])
-#print("HCEnergies:",HCEnergies[0:3])
-#print("MomentaGeV:",MomentaGeV[0:3])
-
-#print(((HCEnergies+ECEnergies)**2-MomentaGeV**2)**0.5)
 
